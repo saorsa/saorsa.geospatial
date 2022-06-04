@@ -12,7 +12,7 @@ public static class GeoSpatial
 
         public const double StatuteMilesInNauticalMile = 1.151;
 
-        public const double KilometersInMile = 1.609344;
+        public const double KilometersInStatuteMile = 1.609344;
 
         public const double KilometersInNauticalMile = 1.852;
 
@@ -121,7 +121,7 @@ public static class GeoSpatial
 
     public static double KmToStatuteMiles(double km)
     {
-        return km / Constants.KilometersInMile;
+        return km / Constants.KilometersInStatuteMile;
     }
     
     public static double KmToNauticalMiles(double km)
@@ -129,9 +129,9 @@ public static class GeoSpatial
         return km / Constants.KilometersInNauticalMile;
     }
     
-    public static double StatuteMilesToKm(double miles)
+    public static double StatuteMilesToKm(double statuteMiles)
     {
-        return miles * Constants.KilometersInMile;
+        return statuteMiles * Constants.KilometersInStatuteMile;
     }
     
     public static double StatuteMilesToNautical(double statuteMiles)
