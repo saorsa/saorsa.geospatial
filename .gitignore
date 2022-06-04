@@ -62,3 +62,5 @@ _ReSharper*/
 
 # Nuget Packages
 *.nupkg
+
+.DS_Store

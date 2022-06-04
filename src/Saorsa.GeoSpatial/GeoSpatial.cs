@@ -143,8 +143,7 @@ public static class GeoSpatial
     {
         return nauticalMiles * Constants.StatuteMilesInNauticalMile;
     }
-    
-    
+
     public static double NauticalMilesToKm(double nauticalMiles)
     {
         return nauticalMiles * Constants.KilometersInNauticalMile;
