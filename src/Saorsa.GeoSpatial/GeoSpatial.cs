@@ -4,27 +4,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 
-public class GeoSpatial
+public static class GeoSpatial
 {
-    static class Constants
+    private static class Constants
     {
         public const double MinutesInDegree = 60;
 
-        public const double StatuteMilesInNauticalMile = 1.1515;
+        public const double StatuteMilesInNauticalMile = 1.151;
 
         public const double KilometersInMile = 1.609344;
 
-        public const double NauticalMilesInMile = 0.8684;
+        public const double KilometersInNauticalMile = 1.852;
+
+        // public const double NauticalMilesInMile = 0.868;
     }
 
-    /// <summary>
-    ///     Calculates geo-spatial distance between two locations.
-    /// </summary>
-    /// <param name="p1">The first point.</param>
-    /// <param name="p2">The second point.</param>
-    /// <param name="unit">
-    ///     The desired distance measurement unit.
-    /// </param>
     public static double GetDistance(
         GeoSpatialPoint p1,
         GeoSpatialPoint p2,
@@ -38,24 +32,6 @@ public class GeoSpatial
             unit);
     }
 
-    /// <summary>
-    ///     Calculates geo-spatial distance between two locations.
-    /// </summary>
-    /// <param name="lat1">
-    ///     The initial location latitude degrees.
-    /// </param>
-    /// <param name="lon1">
-    ///     The initial location longitude degrees.
-    /// </param>
-    /// <param name="lat2">
-    ///     The target location latitude degrees.
-    /// </param>
-    /// <param name="lon2">
-    ///     The target location longitude degrees.
-    /// </param>
-    /// <param name="unit">
-    ///     The desired distance measurement unit.
-    /// </param>
     public static double GetDistance(
         double lat1,
         double lon1,
@@ -63,25 +39,25 @@ public class GeoSpatial
         double lon2,
         GeoSpatialDistanceUnit unit = GeoSpatialDistanceUnit.NauticalMile)
     {
-        double theta = lon1 - lon2;
-        double dist =
+        var theta = lon1 - lon2;
+        var dist =
             Math.Sin(DegreesToRadians(lat1)) * Math.Sin(DegreesToRadians(lat2))
             + Math.Cos(DegreesToRadians(lat1)) * Math.Cos(DegreesToRadians(lat2)) * Math.Cos(DegreesToRadians(theta));
         dist = Math.Acos(dist);
         dist = RadiansToDegrees(dist);
+        // Definition of a Nautical mile
+        dist *= Constants.MinutesInDegree;
 
-        dist =
-            dist *
-            Constants.MinutesInDegree *
-            Constants.StatuteMilesInNauticalMile;
-
-        if (unit == GeoSpatialDistanceUnit.Kilometer)
+        switch (unit)
         {
-            dist = dist * Constants.KilometersInMile;
-        }
-        else if (unit == GeoSpatialDistanceUnit.NauticalMile)
-        {
-            dist = dist * Constants.NauticalMilesInMile;
+            case GeoSpatialDistanceUnit.Kilometer:
+                dist *= Constants.KilometersInNauticalMile;
+                break;
+            case GeoSpatialDistanceUnit.Mile:
+                dist *= Constants.StatuteMilesInNauticalMile;
+                break;
+            case GeoSpatialDistanceUnit.NauticalMile:
+                break;
         }
 
         return dist;
@@ -133,21 +109,44 @@ public class GeoSpatial
         return IsPointInPolygon(point.ToVector(), polygonPoints.Select(p => p.ToVector()));
     }
 
-    /// <summary>
-    ///     Converts degrees to radians.
-    /// </summary>
-    /// <param name="deg">The input degrees value.</param>
     public static double DegreesToRadians(double deg)
     {
         return deg * Math.PI / 180.0;
     }
 
-    /// <summary>
-    ///     Converts radians to degrees.
-    /// </summary>
-    /// <param name="rad">The input radians value.</param>
     public static double RadiansToDegrees(double rad)
     {
-        return (rad / Math.PI * 180.0);
+        return rad / Math.PI * 180.0;
+    }
+
+    public static double KmToStatuteMiles(double km)
+    {
+        return km / Constants.KilometersInMile;
+    }
+    
+    public static double KmToNauticalMiles(double km)
+    {
+        return km / Constants.KilometersInNauticalMile;
+    }
+    
+    public static double StatuteMilesToKm(double miles)
+    {
+        return miles * Constants.KilometersInMile;
+    }
+    
+    public static double StatuteMilesToNautical(double statuteMiles)
+    {
+        return statuteMiles / Constants.StatuteMilesInNauticalMile;
+    }
+    
+    public static double NauticalMilesToStatute(double nauticalMiles)
+    {
+        return nauticalMiles * Constants.StatuteMilesInNauticalMile;
+    }
+    
+    
+    public static double NauticalMilesToKm(double nauticalMiles)
+    {
+        return nauticalMiles * Constants.KilometersInNauticalMile;
     }
 }

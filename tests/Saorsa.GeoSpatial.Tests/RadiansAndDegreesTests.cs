@@ -36,11 +36,11 @@ public class RadiansAndDegreesTests
         var idx = 0;
         while (idx < sampleSize)
         {
-            var rads = random.NextDouble();
-            var degrees = GeoSpatial.RadiansToDegrees(rads);
-            var radsBackwards = GeoSpatial.DegreesToRadians(degrees);
-            var diff = Math.Abs(radsBackwards - rads);
-            Assert.True(diff < 0.001);
+            var origin = random.NextDouble();
+            var derived = GeoSpatial.RadiansToDegrees(origin);
+            var originBackwards = GeoSpatial.DegreesToRadians(derived);
+            var diff = Math.Abs(originBackwards - origin);
+            Assert.True(diff < precision);
             idx++;
         }
     }
