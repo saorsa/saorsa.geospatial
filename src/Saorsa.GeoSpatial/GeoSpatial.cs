@@ -1,4 +1,5 @@
 namespace Saorsa.GeoSpatial;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -106,7 +107,7 @@ public static class GeoSpatial
     /// <param name="polygonPoints">The polygon points. A minimum of three is required.</param>
     public static bool IsPointInPolygon(GeoSpatialPoint point, IEnumerable<GeoSpatialPoint> polygonPoints)
     {
-        return IsPointInPolygon(point.ToVector(), polygonPoints.Select(p => p.ToVector()));
+        return IsPointInPolygon(point.ToVector2(), polygonPoints.Select(p => p.ToVector2()));
     }
 
     public static double DegreesToRadians(double deg)

@@ -2,7 +2,7 @@ using System.Numerics;
 
 namespace Saorsa.GeoSpatial;
 
-public class GeoSpatialPoint: IEquatable<GeoSpatialPoint>, IEquatable<Vector2>
+public class GeoSpatialPoint: IEquatable<GeoSpatialPoint>, IEquatable<Vector2>, ICloneable
 {
     public double Longitude { get; }
 
@@ -25,7 +25,7 @@ public class GeoSpatialPoint: IEquatable<GeoSpatialPoint>, IEquatable<Vector2>
         return other is GeoSpatialPoint otherPoint && Equals(otherPoint);
     }
 
-    public Vector2 ToVector()
+    public Vector2 ToVector2()
     {
         return new Vector2(
             Convert.ToSingle(Latitude), 
@@ -34,7 +34,9 @@ public class GeoSpatialPoint: IEquatable<GeoSpatialPoint>, IEquatable<Vector2>
 
     public bool Equals(GeoSpatialPoint? other)
     {
-        return  other is { } && Latitude.Equals(other.Latitude) && Longitude.Equals(other.Longitude);
+        return  other is { } &&
+                (ReferenceEquals(other, this) ||
+                Latitude.Equals(other.Latitude) && Longitude.Equals(other.Longitude));
     }
 
     public bool Equals(Vector2 other)
@@ -47,23 +49,18 @@ public class GeoSpatialPoint: IEquatable<GeoSpatialPoint>, IEquatable<Vector2>
         return HashCode.Combine(Latitude.GetHashCode(), Longitude.GetHashCode());
     }
 
-    public static bool operator==(GeoSpatialPoint p1, GeoSpatialPoint p2)
+    public object Clone()
     {
-        return p1.Equals(p2);
+        return new GeoSpatialPoint(Latitude, Longitude);
     }
 
-    public static bool operator !=(GeoSpatialPoint p1, GeoSpatialPoint p2)
+    public static bool operator==(GeoSpatialPoint? p1, GeoSpatialPoint? p2)
     {
-        return !p1.Equals(p2);
+        return p1 is {} && p2 is {} && p1.Equals(p2);
     }
 
-    public static bool operator ==(GeoSpatialPoint p1, Vector2 p2)
+    public static bool operator !=(GeoSpatialPoint? p1, GeoSpatialPoint? p2)
     {
-        return p1.Equals(p2);
-    }
-    
-    public static bool operator !=(GeoSpatialPoint p1, Vector2 p2)
-    {
-        return !p1.Equals(p2);
+        return p1 is not {} || p2 is not {} || !p1.Equals(p2);
     }
 }
