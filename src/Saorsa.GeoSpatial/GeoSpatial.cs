@@ -104,9 +104,8 @@ public static class GeoSpatial
     /// <param name="polygonPoints">The polygon points. A minimum of three is required.</param>
     public static bool IsPointInPolygon(Vector2 point, IEnumerable<Vector2> polygonPoints)
     {
-        if (polygonPoints == null) throw new ArgumentNullException(nameof(polygonPoints));
-
-        Vector2[] polygon = polygonPoints.ToArray();
+        var polygon = polygonPoints.ToArray();
+        if (polygon.Length < 3) return false;
 
         int polygonLength = polygon.Length, i = 0;
         bool inside = false;

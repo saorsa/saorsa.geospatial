@@ -46,7 +46,7 @@ public class GeoDistanceTests
         GeoSpatialDistanceUnit.Mile, 
         169.640,
         0.5)]
-    public void TestDistance(
+    public void TestSimplifiedDistance(
         string alias,
         double latitude1, double longitude1,
         double latitude2, double longitude2,
