@@ -17,6 +17,8 @@ public static class GeoSpatial
 
         public const double KilometersInNauticalMile = 1.852;
 
+        public const int RadiusOfEarthInKilometers = 6371;
+
         // public const double NauticalMilesInMile = 0.868;
     }
 
@@ -33,6 +35,37 @@ public static class GeoSpatial
             unit);
     }
 
+    public static double GetHaversineDistance(
+        double lat1,
+        double lon1,
+        double lat2,
+        double lon2,
+        GeoSpatialDistanceUnit unit = GeoSpatialDistanceUnit.NauticalMile)
+    {
+        var lat = DegreesToRadians(lat2 - lat1);
+        var lon = DegreesToRadians(lon2 - lon1);
+
+        var sinLat = Math.Sin(lat / 2);
+        var sinLon = Math.Sin(lon / 2);
+
+        var h1 = sinLat * sinLat
+                 + Math.Cos(DegreesToRadians(lat1)) * Math.Cos(DegreesToRadians(lat2))
+                                                    * sinLon * sinLon;
+        
+        var h2 = 2 * Math.Asin(Math.Min(1, Math.Sqrt(h1)));
+        var distanceInKm = Constants.RadiusOfEarthInKilometers * h2;
+
+        switch (unit)
+        {
+            case GeoSpatialDistanceUnit.Mile:
+                return KmToStatuteMiles(distanceInKm);
+            case GeoSpatialDistanceUnit.NauticalMile:
+                return KmToNauticalMiles(distanceInKm);
+        }
+        
+        return distanceInKm;
+    }
+    
     public static double GetDistance(
         double lat1,
         double lon1,
