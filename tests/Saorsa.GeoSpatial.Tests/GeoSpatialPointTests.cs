@@ -36,6 +36,24 @@ public class GeoSpatialPointTests
         Assert.True(vector == vector2);
         Assert.True(vector.Equals(vector2));
     }
+    
+    [Test]
+    public void TestConstructorFromLatLngTuple()
+    {
+        var random = new Random();
+        var lat = Convert.ToSingle(random.NextDouble());
+        var lon = Convert.ToSingle(random.NextDouble());
+        var point = new GeoSpatialPoint((lat, lon));
+        
+        Assert.AreEqual(lat, point.Latitude);
+        Assert.AreEqual(lon, point.Longitude);
+
+        var tuple = point.ToLatLngTuple();
+        
+        Assert.AreEqual(tuple.Item1, lat);
+        Assert.AreEqual(tuple.Item2, lon);
+        Assert.True(point.Equals(tuple));
+    }
 
     [Test]
     public void TestClone()

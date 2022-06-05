@@ -2,7 +2,11 @@ using System.Numerics;
 
 namespace Saorsa.GeoSpatial;
 
-public class GeoSpatialPoint: IEquatable<GeoSpatialPoint>, IEquatable<Vector2>, ICloneable
+public class GeoSpatialPoint:
+    IEquatable<GeoSpatialPoint>,
+    IEquatable<Vector2>,
+    IEquatable<(double, double)>,
+    ICloneable
 {
     public double Longitude { get; }
 
@@ -12,6 +16,12 @@ public class GeoSpatialPoint: IEquatable<GeoSpatialPoint>, IEquatable<Vector2>, 
     {
         Latitude = lat;
         Longitude = lon;
+    }
+    
+    public GeoSpatialPoint((double, double) latLng)
+    {
+        Latitude = latLng.Item1;
+        Longitude = latLng.Item2;
     }
 
     public GeoSpatialPoint(Vector2 vector)
@@ -31,6 +41,11 @@ public class GeoSpatialPoint: IEquatable<GeoSpatialPoint>, IEquatable<Vector2>, 
             Convert.ToSingle(Latitude), 
             Convert.ToSingle(Longitude));
     }
+    
+    public (double, double) ToLatLngTuple()
+    {
+        return (Latitude, Longitude);
+    }
 
     public bool Equals(GeoSpatialPoint? other)
     {
@@ -42,6 +57,11 @@ public class GeoSpatialPoint: IEquatable<GeoSpatialPoint>, IEquatable<Vector2>, 
     public bool Equals(Vector2 other)
     {
         return Latitude.Equals(other.X) && Longitude.Equals(other.Y);
+    }
+    
+    public bool Equals((double, double) other)
+    {
+        return Latitude.Equals(other.Item1) && Longitude.Equals(other.Item2);
     }
 
     public override int GetHashCode()
