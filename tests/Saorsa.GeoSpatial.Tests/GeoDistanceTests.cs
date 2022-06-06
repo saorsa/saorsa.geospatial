@@ -54,14 +54,23 @@ public class GeoDistanceTests
         double expectedDistance,
         double precision)
     {
-        var distance = GeoSpatial.GetDistance(
+        var distance = GeoSpatial.GetSimplifiedDistance(
             latitude1, longitude1, latitude2, longitude2,
             distanceMeasure);
 
         var diff = Math.Abs(distance - expectedDistance);
         Assert.True(diff < precision);
+
+        var distanceUsingPoint = GeoSpatial.GetSimplifiedDistance(
+            new GeoSpatialPoint(latitude1, longitude1),
+            new GeoSpatialPoint(latitude2, longitude2),
+            distanceMeasure);
+        var diffUsingPoint = Math.Abs(distanceUsingPoint - expectedDistance);
+        Assert.True(diffUsingPoint < precision);
+        
+        Assert.True(Math.Abs(diff - diffUsingPoint) < expectedDistance);
     }
-    
+
     [TestCase(
         "Sofia, Eagles Bridge - Sofia, Yavorov Lane",
         42.690573522, 23.337522419,

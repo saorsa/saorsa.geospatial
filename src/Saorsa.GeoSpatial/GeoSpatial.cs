@@ -22,19 +22,6 @@ public static class GeoSpatial
         // public const double NauticalMilesInMile = 0.868;
     }
 
-    public static double GetDistance(
-        GeoSpatialPoint p1,
-        GeoSpatialPoint p2,
-        GeoSpatialDistanceUnit unit = GeoSpatialDistanceUnit.NauticalMile)
-    {
-        return GetDistance(
-            p1.Latitude,
-            p1.Longitude,
-            p2.Latitude,
-            p2.Longitude,
-            unit);
-    }
-
     public static double GetHaversineDistance(
         double lat1,
         double lon1,
@@ -66,7 +53,7 @@ public static class GeoSpatial
         return distanceInKm;
     }
     
-    public static double GetDistance(
+    public static double GetSimplifiedDistance(
         double lat1,
         double lon1,
         double lat2,
@@ -96,7 +83,20 @@ public static class GeoSpatial
 
         return dist;
     }
-
+    
+    public static double GetSimplifiedDistance(
+        GeoSpatialPoint p1,
+        GeoSpatialPoint p2,
+        GeoSpatialDistanceUnit unit = GeoSpatialDistanceUnit.NauticalMile)
+    {
+        return GetSimplifiedDistance(
+            p1.Latitude,
+            p1.Longitude,
+            p2.Latitude,
+            p2.Longitude,
+            unit);
+    }
+    
     /// <summary>
     ///     Verifies if a given vector point is contained in a given polygon of points.
     /// </summary>
